@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/oumhanane/job-aggregator/compare/v1.1.0...v1.2.0) (2026-07-04)
+
+
+### Features
+
+* **k8s:** add ingress and update deployment configuration ([f6da54e](https://github.com/oumhanane/job-aggregator/commit/f6da54e922ea88ae1fd418dededdbe4f7d30ff39))
+
 # [1.1.0](https://github.com/oumhanane/job-aggregator/compare/v1.0.3...v1.1.0) (2026-07-02)
 
 
