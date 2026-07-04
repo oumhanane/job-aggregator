@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job-aggregator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: job-aggregator
+  template:
+    metadata:
+      labels:
+        app: job-aggregator
+    spec:
+      containers:
+        - name: job-aggregator
+          image: job-aggregator:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000

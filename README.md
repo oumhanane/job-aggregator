@@ -1,135 +1,181 @@
- # Job Aggregator – DevOps Project
+# 🚀 Job Aggregator – DevOps Project
 
-Projet personnel de **job aggregator** développé avec **FastAPI**, containerisé avec **Docker**, et automatisé avec une **pipeline CI/CD GitHub Actions**.
-
----
-
-## Description
-
-Ce projet est une application qui agrège des offres d’emploi provenant de plusieurs sources :
-
-- Remotive  
-- HelloWork  
-- Welcome to the Jungle (WTTJ)
-
-L’application expose :
-- une API REST (FastAPI)
-- une interface web simple (HTML/CSS)
-- un moteur de scoring des offres
-- des filtres par localisation et source
+Projet personnel d’agrégation d’offres d’emploi développé avec **FastAPI**, conteneurisé avec **Docker**, et déployé sur **Kubernetes (Minikube)** avec une pipeline **CI/CD GitHub Actions** et versioning automatique (**semantic-release**).
 
 ---
 
-## Stack technique
+## 🎯 Objectif
+
+Ce projet simule une architecture DevOps complète permettant :
+
+- Agrégation d’offres d’emploi depuis plusieurs sources (HelloWork, WTTJ, Remotive)
+- Traitement et scoring des offres
+- Exposition via API REST
+- Interface utilisateur HTML simple
+- Déploiement Kubernetes avec Ingress
+- Automatisation CI/CD et sécurité
+
+---
+
+## ⚙️ Stack technique
 
 - Python 3.12
 - FastAPI
 - Uvicorn
-- HTML / CSS (UI simple)
+- HTML / CSS / JavaScript (UI simple)
 - Docker
-- Docker Compose
-- Pytest
+- Kubernetes (Minikube)
+- NGINX Ingress Controller
 - GitHub Actions (CI/CD)
+- semantic-release
+- Pytest
 - Bandit (SAST)
 - pip-audit (SCA)
-- Trivy (scan sécurité container)
+- Trivy (scan container)
 
 ---
 
-## Architecture
+## 🧠 Architecture globale
 
+                    ┌────────────────────┐
+                    │     Browser        │
+                    │  job.local / ui    │
+                    └─────────┬──────────┘
+                              │
+                        DNS / hosts
+                              │
+               ┌──────────────▼──────────────┐
+               │     Ingress NGINX           │
+               │   (reverse proxy HTTP)      │
+               └──────────────┬──────────────┘
+                              │
+        ┌─────────────────────┴─────────────────────┐
+        │                                           │
+┌───────▼────────┐                        ┌────────▼────────┐
+│   /ui          │                        │     /api        │
+│ Interface HTML │                        │ FastAPI backend │
+└───────┬────────┘                        └────────┬────────┘
+        │                                           │
+        └─────────────────────┬─────────────────────┘
+                              │
+                    ┌─────────▼─────────┐
+                    │ Kubernetes Service │
+                    └─────────┬─────────┘
+                              │
+                      ┌───────▼───────┐
+                      │ Pod FastAPI   │
+                      └───────────────┘
+📁 Structure du projet
+sources/        → scraping des offres (HelloWork, WTTJ, Remotive)
+core/           → scoring + logique métier
+api.py          → API FastAPI
+ui/             → interface HTML simple
+tests/          → tests unitaires (pytest)
 
-sources/ → scraping des jobs
-core/ → scoring + filtres métier
-api.py → API FastAPI
-static/ → interface web (HTML/CSS)
-tests/ → tests pytest
-Dockerfile → containerisation
-.github/ → CI/CD pipeline
+k8s/
+ ├── deployment.yaml
+ ├── service.yaml
+ ├── ingress.yaml
 
+.github/
+ └── workflows/ CI/CD pipelines
+🎨 Interface utilisateur (UI HTML)
 
----
+Le projet inclut une interface HTML simple permettant d’interagir avec l’API.
 
-## Lancer le projet en local
+Fonctionnalités
+Affichage des offres d’emploi
+Appel API /jobs
+Interface légère HTML/CSS/JS
+Visualisation rapide des résultats
+🚀 Accès UI
+🔹 Mode local (Python / Docker)
+http://localhost:8000/ui
+🔹 Mode Kubernetes (port-forward)
+kubectl port-forward service/job-aggregator-service 8080:8000
 
-### 1. Avec Python
+Accès :
 
-```bash
+http://localhost:8080/ui
+http://localhost:8080/docs
+🔹 Mode Ingress (simulation production)
+http://job.local/ui
+🚀 Lancer le projet
+1. Mode Python
 pip install -r requirements.txt
 uvicorn api:app --reload
-
-Application disponible sur :
-
-http://localhost:8000
-2. Interface Web
-
-UI disponible sur :
-
-http://localhost:8000/ui
-
-Elle affiche les offres d’emploi sous forme simple (HTML/CSS).
-
-3. Avec Docker
+API : http://localhost:8000
+Swagger : http://localhost:8000/docs
+UI : http://localhost:8000/ui
+2. Mode Docker
 docker build -t job-aggregator .
 docker run -p 8000:8000 job-aggregator
-4. Avec Docker Compose
-docker compose up --build
-Lancer les tests
-Local
-python -m pytest
-Dans Docker
-docker compose run --rm job-aggregator python -m pytest
-CI/CD (GitHub Actions)
+3. Mode Kubernetes (Minikube)
+eval $(minikube docker-env)
 
-Pipeline automatisé :
+docker build -t job-aggregator:1.0.0 .
 
-Tests avec pytest
-Analyse SAST (Bandit)
-Analyse SCA (pip-audit)
-Build image Docker
-Scan sécurité avec Trivy
-Push image vers Docker Hub
+kubectl apply -f k8s/
+🌐 Accès Kubernetes
+🔹 Mode DEV (recommandé)
+kubectl port-forward service/job-aggregator-service 8080:8000
+API : http://localhost:8080
+Swagger : http://localhost:8080/docs
+UI : http://localhost:8080/ui
+🔹 Mode Ingress
+http://job.local
+http://job.local/ui
+📊 API Endpoints
+Endpoint	Description
+GET /	Status API
+GET /jobs	Liste des offres filtrées
+GET /stats	Statistiques par source
+GET /docs	Swagger UI
+GET /ui	Interface utilisateur
+🔐 CI/CD Pipeline
 
-Déclenchement :
+Pipeline GitHub Actions :
 
-push sur main
-tags v*
-Variables d’environnement (GitHub Secrets)
-DOCKERHUB_USERNAME=your_username
-DOCKERHUB_TOKEN=your_token
-Endpoints API
-GET /
-{ "status": "job-aggregator running" }
-GET /jobs
+Tests (pytest)
+SAST (Bandit)
+SCA (pip-audit)
+Build Docker image
+Scan sécurité (Trivy)
+Release automatique (semantic-release)
+🔢 Versioning automatique
 
-Retourne les offres filtrées et scorées.
+Basé sur Conventional Commits :
 
-GET /stats
+feat: → nouvelle fonctionnalité
+fix: → correction
+docs: → documentation
 
-Retourne les statistiques par source et localisation.
+Exemple :
 
-GET /ui
-
-Interface web simple affichant les offres.
-
-Objectifs DevOps du projet
-Containerisation complète avec Docker
-Automatisation des tests
-CI/CD complet (tests + SAST + SCA + build + push)
-Scan sécurité des images (Trivy)
-Interface web simple (UI)
-Préparation à une architecture Kubernetes
-Améliorations possibles
+v1.0.0 → initial release
+v1.1.0 → new features
+v1.1.1 → bug fixes
+☸️ Ressources Kubernetes
+Deployment → application FastAPI
+Service (ClusterIP / NodePort)
+Ingress → routing HTTP via job.local
+🎯 Objectifs DevOps atteints
+✔ Containerisation Docker
+✔ CI/CD automatisée
+✔ Security scanning (SAST / SCA / Trivy)
+✔ Kubernetes deployment
+✔ Ingress HTTP routing
+✔ Interface utilisateur simple
+✔ Versioning automatique
+✔ Architecture cloud-ready
+📈 Améliorations futures
 Base de données PostgreSQL
-Déploiement Kubernetes (Minikube / EKS)
-Monitoring (Prometheus / Grafana)
-Cache Redis
-Versioning avancé des images Docker
-UI plus avancée (React ou Vue)
-Auteur
+Helm charts Kubernetes
+Monitoring Prometheus + Grafana
+TLS (cert-manager)
+Déploiement cloud (EKS / AKS)
+Frontend React/Vue
+Service Mesh (Istio)
+👨‍💻 Auteur
 
-Projet personnel DevOps – Saliha
-
-Licence
-
-Projet personnel – usage éducatif
+Projet DevOps – Saliha Hammad
