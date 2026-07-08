@@ -34,51 +34,21 @@ Ce projet simule une architecture DevOps complète permettant :
 - Trivy (scan container)
 
 ---
-
-## 🧠 Architecture globale
-
-                    ┌────────────────────┐
-                    │     Browser        │
-                    │  job.local / ui    │
-                    └─────────┬──────────┘
-                              │
-                        DNS / hosts
-                              │
-               ┌──────────────▼──────────────┐
-               │     Ingress NGINX           │
-               │   (reverse proxy HTTP)      │
-               └──────────────┬──────────────┘
-                              │
-        ┌─────────────────────┴─────────────────────┐
-        │                                           │
-┌───────▼────────┐                        ┌────────▼────────┐
-│   /ui          │                        │     /api        │
-│ Interface HTML │                        │ FastAPI backend │
-└───────┬────────┘                        └────────┬────────┘
-        │                                           │
-        └─────────────────────┬─────────────────────┘
-                              │
-                    ┌─────────▼─────────┐
-                    │ Kubernetes Service │
-                    └─────────┬─────────┘
-                              │
-                      ┌───────▼───────┐
-                      │ Pod FastAPI   │
-                      └───────────────┘
 📁 Structure du projet
-sources/        → scraping des offres (HelloWork, WTTJ, Remotive)
-core/           → scoring + logique métier
-api.py          → API FastAPI
-ui/             → interface HTML simple
-tests/          → tests unitaires (pytest)
+ - sources/        → scraping des offres (HelloWork, WTTJ, Remotive)
+ - core/           → scoring + logique métier
+ - api.py          → API FastAPI
+ - ui/             → interface HTML simple
+ - tests/          → tests unitaires (pytest)
 
 k8s/
- ├── deployment.yaml
- ├── service.yaml
- ├── ingress.yaml
+ - deployment.yaml
+ - service.yaml
+ - ingress.yaml
 
 .github/
- └── workflows/ CI/CD pipelines
+  - workflows/ CI/CD pipelines
+
 🎨 Interface utilisateur (UI HTML)
 
 Le projet inclut une interface HTML simple permettant d’interagir avec l’API.
