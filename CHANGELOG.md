@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/oumhanane/job-aggregator/compare/v1.2.0...v1.3.0) (2026-07-10)
+
+
+### Features
+
+* **argocd:** add GitOps deployment with ArgoCD project ([fb647f3](https://github.com/oumhanane/job-aggregator/commit/fb647f3577c73ba4f64ca934fbbd24fbc58ac886))
+
 # [1.2.0](https://github.com/oumhanane/job-aggregator/compare/v1.1.0...v1.2.0) (2026-07-04)
 
 
