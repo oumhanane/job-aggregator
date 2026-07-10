@@ -1,14 +1,18 @@
-name: CI/CD Job Aggregator
+name: CI Job Aggregator
 
 on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
+
+  pull_request:
+    branches:
+      - main
+
 
 env:
   IMAGE_NAME: job-aggregator
+
 
 jobs:
 
@@ -29,6 +33,7 @@ jobs:
       - name: Run tests inside container
         run: docker compose run --rm job-aggregator python -m pytest
 
+
   # -------------------------
   # SAST + SCA
   # -------------------------
@@ -41,31 +46,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Python + cache pip
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
 
-      # Install project dependencies
-      - name: Install project dependencies
+
+      - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt 
+          pip install -r requirements.txt
 
-      # Install security tools
+
       - name: Install security tools
         run: |
           pip install bandit pip-audit
 
-      # SAST
-      - name: Run Bandit (SAST)
-        run: bandit -c bandit.yaml -r . -f json -o bandit-report.json || true
 
-      # SCA
+      - name: Run Bandit (SAST)
+        run: |
+          bandit -c bandit.yaml -r . -f json -o bandit-report.json || true
+
+
       - name: Run pip-audit (SCA)
-        run: pip-audit -r requirements.txt || true
+        run: |
+          pip-audit -r requirements.txt || true
+
+
 
   # -------------------------
   # CONTAINER SECURITY
@@ -75,12 +84,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: security_analysis
 
+
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
+
       - name: Build image
-        run: docker build -t ${{ env.IMAGE_NAME }}:latest .
+        run: |
+          docker build -t ${{ env.IMAGE_NAME }}:latest .
+
 
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@v0.35.0
@@ -90,49 +104,3 @@ jobs:
           severity: CRITICAL
           ignore-unfixed: true
           exit-code: "0"
-
-  # -------------------------
-  # BUILD & PUSH
-  # -------------------------
-  build_and_push:
-    name: Build & Push Docker Image
-    runs-on: ubuntu-latest
-    needs: security
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Define image version
-        run: |
-          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
-            echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          else
-            echo "VERSION=latest" >> $GITHUB_ENV
-          fi
-
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/job-aggregator:${VERSION} .
-
-      - name: Tag latest (only on main)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker tag \
-            ${{ secrets.DOCKERHUB_USERNAME }}/job-aggregator:${VERSION} \
-            ${{ secrets.DOCKERHUB_USERNAME }}/job-aggregator:latest
-
-      - name: Push versioned image
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/job-aggregator:${VERSION}
-
-      - name: Push latest (only on main)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/job-aggregator:latest

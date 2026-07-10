@@ -34,7 +34,7 @@ spec:
 
           # Image publiée sur Docker Hub
           # À mettre à jour à chaque nouvelle release
-          image: saliha91700/job-aggregator:v1.0.3
+          image: saliha91700/job-aggregator:v1.3.0
 
           # Toujours vérifier si une nouvelle image existe
           imagePullPolicy: Always

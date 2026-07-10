@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+
+metadata:
+  name: job-aggregator
+  namespace: argocd
+
+spec:
+  project: job-aggregator
+
+  source:
+    repoURL: https://github.com/oumhanane/job-agregator.git
+    targetRevision: main
+    path: k8s
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
