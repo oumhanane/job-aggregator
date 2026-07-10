@@ -1,151 +1,327 @@
-# 🚀 Job Aggregator – DevOps Project
+🚀 Job Aggregator – Cloud Native DevOps Project
 
-Projet personnel d’agrégation d’offres d’emploi développé avec **FastAPI**, conteneurisé avec **Docker**, et déployé sur **Kubernetes (Minikube)** avec une pipeline **CI/CD GitHub Actions** et versioning automatique (**semantic-release**).
+Projet personnel d'agrégation d'offres d'emploi développé avec FastAPI, conteneurisé avec Docker et déployé sur Kubernetes (Minikube).
 
----
+Le projet met en œuvre une chaîne DevOps complète intégrant :
 
-## 🎯 Objectif
+CI automatisée avec GitHub Actions
+Versioning automatique avec Semantic Release
+Publication des images sur Docker Hub
+Déploiement GitOps avec ArgoCD
+Sécurité applicative (SAST, SCA, scan d'images)
+Déploiement continu sur Kubernetes
 
-Ce projet simule une architecture DevOps complète permettant :
+🎯 Objectif
 
-- Agrégation d’offres d’emploi depuis plusieurs sources (HelloWork, WTTJ, Remotive)
-- Traitement et scoring des offres
-- Exposition via API REST
-- Interface utilisateur HTML simple
-- Déploiement Kubernetes avec Ingress
-- Automatisation CI/CD et sécurité
+Ce projet simule une plateforme DevOps moderne permettant :
 
----
+Agrégation d'offres d'emploi depuis plusieurs sources
+Traitement et scoring des offres
+Exposition via une API REST
+Interface Web légère
+Déploiement Kubernetes
+Livraison continue GitOps
 
-## ⚙️ Stack technique
+L'objectif est de reproduire une architecture proche de celles rencontrées en entreprise.
 
-- Python 3.12
-- FastAPI
-- Uvicorn
-- HTML / CSS / JavaScript (UI simple)
-- Docker
-- Kubernetes (Minikube)
-- NGINX Ingress Controller
-- GitHub Actions (CI/CD)
-- semantic-release
-- Pytest
-- Bandit (SAST)
-- pip-audit (SCA)
-- Trivy (scan container)
+⚙️ Stack technique
+Python 3.12
+FastAPI
+Uvicorn
+HTML / CSS / JavaScript
+Docker
+Docker Hub
+Kubernetes (Minikube)
+NGINX Ingress Controller
+ArgoCD
+GitHub Actions
+Semantic Release
+Pytest
+Bandit
+pip-audit
+Trivy
 
----
 📁 Structure du projet
- - sources/        → scraping des offres (HelloWork, WTTJ, Remotive)
- - core/           → scoring + logique métier
- - api.py          → API FastAPI
- - ui/             → interface HTML simple
- - tests/          → tests unitaires (pytest)
+job-aggregator/
 
-k8s/
- - deployment.yaml
- - service.yaml
- - ingress.yaml
+├── api.py
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+├── README.md
 
-.github/
-  - workflows/ CI/CD pipelines
+├── core/
+│   └── logique métier
 
-🎨 Interface utilisateur (UI HTML)
+├── sources/
+│   ├── HelloWork
+│   ├── Welcome To The Jungle
+│   └── Remotive
 
-Le projet inclut une interface HTML simple permettant d’interagir avec l’API.
+├── ui/
+│   ├── index.html
+│   ├── css/
+│   └── javascript/
 
-Fonctionnalités
-Affichage des offres d’emploi
-Appel API /jobs
-Interface légère HTML/CSS/JS
-Visualisation rapide des résultats
-🚀 Accès UI
-🔹 Mode local (Python / Docker)
+├── tests/
+
+├── k8s/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── ingress.yaml
+
+├── argocd/
+│   ├── application.yaml
+│   └── project.yaml
+
+└── .github/
+    └── workflows/
+        ├── ci.yaml
+        ├── release.yaml
+        └── docker-release.yaml
+
+🎨 Interface utilisateur
+
+Une interface HTML légère permet :
+
+consulter les offres
+appeler l'API
+tester rapidement le projet
+
+Accès :
+
 http://localhost:8000/ui
-🔹 Mode Kubernetes (port-forward)
+
+🚀 Exécution
+Python
+pip install -r requirements.txt
+
+uvicorn api:app --reload
+
+API
+
+http://localhost:8000
+
+Swagger
+
+http://localhost:8000/docs
+
+UI
+
+http://localhost:8000/ui
+Docker
+docker build -t job-aggregator .
+
+docker run -p 8000:8000 job-aggregator
+Kubernetes
+kubectl apply -f k8s/
+
+🌐 Accès Kubernetes
+
+Port Forward
+
 kubectl port-forward service/job-aggregator-service 8080:8000
 
 Accès :
 
-http://localhost:8080/ui
+http://localhost:8080
+
 http://localhost:8080/docs
-🔹 Mode Ingress (simulation production)
-http://job.local/ui
-🚀 Lancer le projet
-1. Mode Python
-pip install -r requirements.txt
-uvicorn api:app --reload
-API : http://localhost:8000
-Swagger : http://localhost:8000/docs
-UI : http://localhost:8000/ui
-2. Mode Docker
-docker build -t job-aggregator .
-docker run -p 8000:8000 job-aggregator
-3. Mode Kubernetes (Minikube)
-eval $(minikube docker-env)
 
-docker build -t job-aggregator:1.0.0 .
+http://localhost:8080/ui
 
-kubectl apply -f k8s/
-🌐 Accès Kubernetes
-🔹 Mode DEV (recommandé)
-kubectl port-forward service/job-aggregator-service 8080:8000
-API : http://localhost:8080
-Swagger : http://localhost:8080/docs
-UI : http://localhost:8080/ui
-🔹 Mode Ingress
+Ingress
+
 http://job.local
+
 http://job.local/ui
-📊 API Endpoints
+
+☸️ Ressources Kubernetes
+
+Le projet déploie :
+
+Deployment
+Service
+Ingress
+
+Le déploiement utilise :
+
+Rolling Update
+Readiness Probe
+Liveness Probe
+Resource Requests/Limits
+
+🔄 Déploiement GitOps avec ArgoCD
+
+Le déploiement Kubernetes est piloté par ArgoCD.
+
+Deux ressources sont utilisées :
+
+argocd/
+
+project.yaml
+
+application.yaml
+
+Le projet ArgoCD :
+
+job-aggregator
+
+surveille automatiquement le dépôt Git.
+
+Fonctionnalités activées :
+
+Synchronisation automatique
+Auto-healing
+Prune automatique
+
+Flux GitOps :
+
+GitHub
+      │
+      ▼
+ ArgoCD
+      │
+      ▼
+ Kubernetes
+
+Chaque modification du dépôt est détectée puis appliquée automatiquement au cluster.
+
+📊 API
 Endpoint	Description
-GET /	Status API
-GET /jobs	Liste des offres filtrées
-GET /stats	Statistiques par source
-GET /docs	Swagger UI
+GET /	Status
+GET /jobs	Liste des offres
+GET /stats	Statistiques
+GET /docs	Swagger
 GET /ui	Interface utilisateur
-🔐 CI/CD Pipeline
 
-Pipeline GitHub Actions :
+🔐 CI
 
-Tests (pytest)
-SAST (Bandit)
-SCA (pip-audit)
-Build Docker image
-Scan sécurité (Trivy)
-Release automatique (semantic-release)
-🔢 Versioning automatique
+La pipeline de Continuous Integration exécute automatiquement :
+
+Tests Pytest
+Analyse SAST avec Bandit
+Analyse SCA avec pip-audit
+Scan de l'image Docker avec Trivy
+
+Workflow :
+
+.github/workflows/ci.yaml
+
+🚀 Release automatique
+
+Le versioning est assuré par Semantic Release.
 
 Basé sur Conventional Commits :
 
-feat: → nouvelle fonctionnalité
-fix: → correction
-docs: → documentation
+feat:
 
-Exemple :
+→ nouvelle fonctionnalité
 
-v1.0.0 → initial release
-v1.1.0 → new features
-v1.1.1 → bug fixes
-☸️ Ressources Kubernetes
-Deployment → application FastAPI
-Service (ClusterIP / NodePort)
-Ingress → routing HTTP via job.local
-🎯 Objectifs DevOps atteints
-✔ Containerisation Docker
-✔ CI/CD automatisée
-✔ Security scanning (SAST / SCA / Trivy)
-✔ Kubernetes deployment
-✔ Ingress HTTP routing
-✔ Interface utilisateur simple
-✔ Versioning automatique
-✔ Architecture cloud-ready
-📈 Améliorations futures
-Base de données PostgreSQL
-Helm charts Kubernetes
-Monitoring Prometheus + Grafana
-TLS (cert-manager)
-Déploiement cloud (EKS / AKS)
-Frontend React/Vue
-Service Mesh (Istio)
+fix:
+
+→ correction
+
+docs:
+
+→ documentation
+
+Workflow :
+
+.github/workflows/release.yaml
+
+Semantic Release génère automatiquement :
+
+le numéro de version
+le CHANGELOG
+le tag Git
+la GitHub Release
+
+🐳 Docker Release
+
+Chaque nouveau tag Git déclenche automatiquement :
+
+construction de l'image
+publication sur Docker Hub
+
+Images publiées :
+
+saliha91700/job-aggregator:vX.Y.Z
+
+saliha91700/job-aggregator:latest
+
+Workflow :
+
+.github/workflows/docker-release.yaml
+
+🔄 Flux DevOps
+Developer
+
+      │
+
+git push
+
+      │
+
+GitHub
+
+      │
+
+CI
+
+      │
+
+Semantic Release
+
+      │
+
+Git Tag
+
+      │
+
+Docker Hub
+
+      │
+
+ArgoCD
+
+      │
+
+Kubernetes
+
+🎯 Compétences DevOps mises en œuvre
+Docker
+Kubernetes
+GitHub Actions
+GitOps
+ArgoCD
+Docker Hub
+Semantic Release
+CI
+Continuous Delivery
+Rolling Update
+Health Checks
+Security Scanning
+Infrastructure as Code
+
+📈 Évolutions prévues
+PostgreSQL
+Authentification utilisateurs
+Helm Charts
+Prometheus
+Grafana
+Vault
+Argo Rollouts
+Argo Image Updater
+cert-manager
+EKS
+AKS
+GKE
+Architecture microservices
+MLOps (personnalisation des offres)
+
 👨‍💻 Auteur
 
-Projet DevOps – Saliha Hammad
+Saliha Hammad
+
+Projet personnel réalisé dans le cadre de ma montée en compétences vers un poste d'Ingénieure DevOps / Cloud Native, avec pour objectif de mettre en œuvre des pratiques modernes de CI/CD, GitOps et d'automatisation sur Kubernetes.
