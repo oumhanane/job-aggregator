@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/oumhanane/job-aggregator/compare/v1.3.0...v1.4.0) (2026-07-11)
+
+
+### Features
+
+* add docker release workflow and update kubernetes image ([6450bb8](https://github.com/oumhanane/job-aggregator/commit/6450bb8e21a4f2d2c0993002bda2bd9782b71895))
+
 # [1.3.0](https://github.com/oumhanane/job-aggregator/compare/v1.2.0...v1.3.0) (2026-07-10)
 
 
