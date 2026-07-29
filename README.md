@@ -1,47 +1,95 @@
-🚀 Job Aggregator – Cloud Native DevOps Project
+# 🚀 Job Aggregator – Cloud Native DevOps Project
 
-Projet personnel d'agrégation d'offres d'emploi développé avec FastAPI, conteneurisé avec Docker et déployé sur Kubernetes (Minikube).
+Projet personnel d'agrégation d'offres d'emploi développé avec **FastAPI**, conteneurisé avec **Docker** et déployé sur **Kubernetes (Minikube)**.
 
 Le projet met en œuvre une chaîne DevOps complète intégrant :
 
-CI automatisée avec GitHub Actions
-Versioning automatique avec Semantic Release
-Publication des images sur Docker Hub
-Déploiement GitOps avec ArgoCD
-Sécurité applicative (SAST, SCA, scan d'images)
-Déploiement continu sur Kubernetes
+* CI automatisée avec GitHub Actions
+* Versioning automatique avec Semantic Release
+* Publication des images Docker sur Docker Hub
+* Déploiement GitOps avec Argo CD
+* Sécurité applicative (SAST, SCA, scan d'images)
+* Déploiement continu sur Kubernetes
+* Observabilité avec Prometheus et Grafana
 
-🎯 Objectif
+L'objectif est de reproduire une architecture Cloud Native proche de celles rencontrées en entreprise.
+
+---
+
+# 🎯 Objectif
 
 Ce projet simule une plateforme DevOps moderne permettant :
 
-Agrégation d'offres d'emploi depuis plusieurs sources
-Traitement et scoring des offres
-Exposition via une API REST
-Interface Web légère
-Déploiement Kubernetes
-Livraison continue GitOps
+* Agrégation d'offres d'emploi depuis plusieurs sources
+* Traitement et scoring des offres
+* Exposition via une API REST
+* Interface Web légère
+* Conteneurisation Docker
+* Déploiement Kubernetes
+* Livraison continue GitOps
+* Supervision de l'application et du cluster Kubernetes
 
-L'objectif est de reproduire une architecture proche de celles rencontrées en entreprise.
+---
 
-⚙️ Stack technique
-Python 3.12
-FastAPI
-Uvicorn
-HTML / CSS / JavaScript
-Docker
-Docker Hub
-Kubernetes (Minikube)
-NGINX Ingress Controller
-ArgoCD
-GitHub Actions
-Semantic Release
-Pytest
-Bandit
-pip-audit
-Trivy
+# ⚙️ Stack technique
 
-📁 Structure du projet
+## Application
+
+* Python 3.12
+* FastAPI
+* Uvicorn
+* HTML / CSS / JavaScript
+* Pytest
+
+## Conteneurisation
+
+* Docker
+* Docker Hub
+
+## Kubernetes
+
+* Kubernetes
+* Minikube
+* NGINX Ingress Controller
+* Readiness Probe
+* Liveness Probe
+* Resource Requests / Limits
+* Metrics Server
+
+## GitOps
+
+* Argo CD
+* GitHub Repository as Source of Truth
+* Synchronisation automatique
+* Auto-healing
+* Prune automatique
+
+## CI/CD
+
+* GitHub Actions
+* Semantic Release
+* Conventional Commits
+
+## Sécurité
+
+* Bandit (SAST)
+* pip-audit (SCA)
+* Trivy (Container Security)
+
+## Observabilité
+
+* Prometheus
+* Grafana
+* kube-prometheus-stack
+* Alertmanager
+* kube-state-metrics
+* node-exporter
+
+---
+
+# 📁 Structure du projet
+
+```text
 job-aggregator/
 
 ├── api.py
@@ -66,9 +114,15 @@ job-aggregator/
 ├── tests/
 
 ├── k8s/
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   └── ingress.yaml
+│
+│   ├── app/
+│   │   ├── deployment.yaml
+│   │   ├── service.yaml
+│   │   └── ingress.yaml
+│   │
+│   └── monitoring/
+│       ├── namespace.yaml
+│       └── monitoring.yaml
 
 ├── argocd/
 │   ├── application.yaml
@@ -79,249 +133,386 @@ job-aggregator/
         ├── ci.yaml
         ├── release.yaml
         └── docker-release.yaml
+```
 
-🎨 Interface utilisateur
+---
+
+# 🎨 Interface utilisateur
 
 Une interface HTML légère permet :
 
-consulter les offres
-appeler l'API
-tester rapidement le projet
+* consulter les offres
+* appeler l'API
+* tester rapidement le projet
 
-Accès :
+Accès local :
 
+```text
 http://localhost:8000/ui
+```
 
-🚀 Exécution
-Python
+---
+
+# 🚀 Exécution
+
+## Python
+
+Installation :
+
+```bash
 pip install -r requirements.txt
+```
 
+Lancement :
+
+```bash
 uvicorn api:app --reload
+```
 
-API
+API :
 
+```text
 http://localhost:8000
+```
 
-Swagger
+Swagger :
 
+```text
 http://localhost:8000/docs
+```
 
-UI
+UI :
 
+```text
 http://localhost:8000/ui
-Docker
+```
+
+---
+
+# 🐳 Docker
+
+Construction :
+
+```bash
 docker build -t job-aggregator .
+```
 
+Exécution :
+
+```bash
 docker run -p 8000:8000 job-aggregator
-Kubernetes
-kubectl apply -f k8s/
+```
 
-🌐 Accès Kubernetes
+---
 
-Port Forward
+# ☸️ Déploiement Kubernetes
 
-kubectl port-forward service/job-aggregator-service 8080:8000
+Les manifests Kubernetes sont versionnés dans Git.
 
-Accès :
+Application :
 
-http://localhost:8080
+```text
+k8s/app/
+```
 
-http://localhost:8080/docs
+Déploiement :
 
-http://localhost:8080/ui
+```bash
+kubectl apply -f k8s/app/
+```
 
-Ingress
+Ressources déployées :
 
-http://job.local
-
-http://job.local/ui
-
-☸️ Ressources Kubernetes
-
-Le projet déploie :
-
-Deployment
-Service
-Ingress
+* Deployment
+* Service
+* Ingress
 
 Le déploiement utilise :
 
-Rolling Update
-Readiness Probe
-Liveness Probe
-Resource Requests/Limits
+* Rolling Update
+* Readiness Probe
+* Liveness Probe
+* Resource Requests/Limits
 
-🔄 Déploiement GitOps avec ArgoCD
+---
 
-Le déploiement Kubernetes est piloté par ArgoCD.
+# 🔄 Déploiement GitOps avec Argo CD
 
-Deux ressources sont utilisées :
+Le déploiement Kubernetes est piloté par Argo CD.
 
+GitHub est utilisé comme **Source of Truth**.
+
+Architecture :
+
+```text
+GitHub
+   |
+   v
+ Argo CD
+   |
+   v
+ Kubernetes
+```
+
+L'application métier est gérée par :
+
+```text
 argocd/
 
-project.yaml
-
-application.yaml
-
-Le projet ArgoCD :
-
-job-aggregator
-
-surveille automatiquement le dépôt Git.
+├── project.yaml
+└── application.yaml
+```
 
 Fonctionnalités activées :
 
-Synchronisation automatique
-Auto-healing
-Prune automatique
+* Synchronisation automatique
+* Auto-healing
+* Prune automatique
 
-Flux GitOps :
+Chaque modification du dépôt Git est automatiquement détectée puis appliquée au cluster Kubernetes.
 
-GitHub
-      │
-      ▼
- ArgoCD
-      │
-      ▼
- Kubernetes
+---
 
-Chaque modification du dépôt est détectée puis appliquée automatiquement au cluster.
+# 📊 Observabilité Kubernetes
 
-📊 API
-Endpoint	Description
-GET /	Status
-GET /jobs	Liste des offres
-GET /stats	Statistiques
-GET /docs	Swagger
-GET /ui	Interface utilisateur
+Une stack complète d'observabilité a été ajoutée avec Argo CD.
 
-🔐 CI
+Déploiement :
 
-La pipeline de Continuous Integration exécute automatiquement :
+```text
+k8s/monitoring/
+```
 
-Tests Pytest
-Analyse SAST avec Bandit
-Analyse SCA avec pip-audit
-Scan de l'image Docker avec Trivy
+Technologies utilisées :
+
+* Prometheus
+* Grafana
+* Alertmanager
+* kube-state-metrics
+* node-exporter
+
+Installation réalisée via :
+
+```text
+kube-prometheus-stack Helm Chart
+```
+
+Architecture :
+
+```text
+Application FastAPI
+        |
+        v
+     Metrics
+        |
+        v
+   Prometheus
+        |
+        v
+     Grafana
+```
+
+Cette stack permet de superviser :
+
+* ressources Kubernetes
+* état des pods
+* utilisation CPU / mémoire
+* métriques applicatives
+* performances du cluster
+
+---
+
+# 📊 API
+
+| Endpoint   | Description           |
+| ---------- | --------------------- |
+| GET /      | Status                |
+| GET /jobs  | Liste des offres      |
+| GET /stats | Statistiques          |
+| GET /docs  | Swagger               |
+| GET /ui    | Interface utilisateur |
+
+---
+
+# 🔐 CI
+
+La pipeline Continuous Integration exécute automatiquement :
+
+* Tests Pytest
+* Analyse SAST avec Bandit
+* Analyse SCA avec pip-audit
+* Scan de l'image Docker avec Trivy
 
 Workflow :
 
+```text
 .github/workflows/ci.yaml
+```
 
-🚀 Release automatique
+---
+
+# 🚀 Release automatique
 
 Le versioning est assuré par Semantic Release.
 
 Basé sur Conventional Commits :
 
+```text
 feat:
+```
 
-→ nouvelle fonctionnalité
+Nouvelle fonctionnalité
 
+```text
 fix:
+```
 
-→ correction
+Correction
 
+```text
 docs:
+```
 
-→ documentation
-
-Workflow :
-
-.github/workflows/release.yaml
+Documentation
 
 Semantic Release génère automatiquement :
 
-le numéro de version
-le CHANGELOG
-le tag Git
-la GitHub Release
-
-🐳 Docker Release
-
-Chaque nouveau tag Git déclenche automatiquement :
-
-construction de l'image
-publication sur Docker Hub
-
-Images publiées :
-
-saliha91700/job-aggregator:vX.Y.Z
-
-saliha91700/job-aggregator:latest
+* numéro de version
+* CHANGELOG
+* tag Git
+* GitHub Release
 
 Workflow :
 
-.github/workflows/docker-release.yaml
+```text
+.github/workflows/release.yaml
+```
 
-🔄 Flux DevOps
+---
+
+# 🐳 Docker Release
+
+Chaque nouveau tag Git déclenche automatiquement :
+
+* construction de l'image Docker
+* publication sur Docker Hub
+
+Images publiées :
+
+```text
+saliha91700/job-aggregator:vX.Y.Z
+
+saliha91700/job-aggregator:latest
+```
+
+Workflow :
+
+```text
+.github/workflows/docker-release.yaml
+```
+
+---
+
+# 🔄 Flux DevOps complet
+
+```text
 Developer
 
-      │
+    |
+    v
 
-git push
+Git Push
 
-      │
+    |
+    v
 
 GitHub
 
-      │
+    |
+    v
 
-CI
+GitHub Actions CI
 
-      │
+    |
+    v
 
 Semantic Release
 
-      │
-
-Git Tag
-
-      │
+    |
+    v
 
 Docker Hub
 
-      │
+    |
+    v
 
-ArgoCD
+Argo CD
 
-      │
+    |
+    v
 
 Kubernetes
 
-🎯 Compétences DevOps mises en œuvre
-Docker
-Kubernetes
-GitHub Actions
-GitOps
-ArgoCD
-Docker Hub
-Semantic Release
-CI
-Continuous Delivery
-Rolling Update
-Health Checks
-Security Scanning
-Infrastructure as Code
+    |
+    v
 
-📈 Évolutions prévues
-PostgreSQL
-Authentification utilisateurs
-Helm Charts
-Prometheus
-Grafana
-Vault
-Argo Rollouts
-Argo Image Updater
-cert-manager
-EKS
-AKS
-GKE
-Architecture microservices
-MLOps (personnalisation des offres)
+Prometheus / Grafana
+```
 
-👨‍💻 Auteur
+---
 
-Saliha Hammad
+# 🎯 Compétences DevOps mises en œuvre
 
-Projet personnel réalisé dans le cadre de ma montée en compétences vers un poste d'Ingénieure DevOps / Cloud Native, avec pour objectif de mettre en œuvre des pratiques modernes de CI/CD, GitOps et d'automatisation sur Kubernetes.
+* Docker
+* Kubernetes
+* GitHub Actions
+* GitOps
+* Argo CD
+* Docker Hub
+* Semantic Release
+* CI/CD
+* Continuous Delivery
+* Rolling Update
+* Health Checks
+* Security Scanning
+* Infrastructure as Code
+* Observabilité Kubernetes
+* Monitoring Cloud Native
+
+---
+
+# 📈 Évolutions réalisées et futures
+
+## Réalisées
+
+✅ CI/CD GitHub Actions
+✅ Conteneurisation Docker
+✅ Déploiement Kubernetes
+✅ GitOps avec Argo CD
+✅ Prometheus
+✅ Grafana
+✅ Monitoring Kubernetes
+
+## Futures évolutions
+
+* Instrumentation FastAPI avec métriques applicatives
+* ServiceMonitor Prometheus
+* Dashboards Grafana personnalisés
+* Vault pour la gestion des secrets
+* Helm Charts
+* Argo Rollouts
+* Argo Image Updater
+* cert-manager
+* Déploiement Cloud (EKS / AKS / GKE)
+* Architecture microservices
+* MLOps (personnalisation des offres)
+
+---
+
+# 👨‍💻 Auteur
+
+**Saliha Hammad**
+
+Projet personnel réalisé dans le cadre d'une montée en compétences vers un poste d'Ingénieure DevOps / Cloud Native.
+
+Objectif : mettre en œuvre des pratiques modernes de CI/CD, GitOps, Kubernetes, automatisation et observabilité dans une architecture proche des environnements professionnels.
