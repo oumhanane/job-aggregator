@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/oumhanane/job-agregator.git
     targetRevision: main
-    path: k8s
+    path: k8s/app
 
   destination:
     server: https://kubernetes.default.svc
