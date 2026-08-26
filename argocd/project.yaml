@@ -9,7 +9,7 @@ spec:
   description: Job Aggregator application project
 
   sourceRepos:
-    - https://github.com/oumhanane/job-agregator.git
+    - https://github.com/oumhanane/job-aggregator.git
 
   destinations:
     - namespace: default

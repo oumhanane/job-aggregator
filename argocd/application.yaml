@@ -9,7 +9,7 @@ spec:
   project: job-aggregator
 
   source:
-    repoURL: https://github.com/oumhanane/job-agregator.git
+    repoURL: https://github.com/oumhanane/job-aggregator.git
     targetRevision: main
     path: k8s/app
 
