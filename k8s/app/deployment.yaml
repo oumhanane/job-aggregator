@@ -29,6 +29,11 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
 
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+
       containers:
         - name: job-aggregator
 
@@ -39,6 +44,14 @@ spec:
           # Toujours vérifier si une nouvelle image existe
           imagePullPolicy: Always
 
+          securityContext:
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+            capabilities:
+              drop:
+                - ALL
           ports:
             - name: http
               containerPort: 8000
