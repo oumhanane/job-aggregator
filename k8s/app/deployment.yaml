@@ -3,6 +3,7 @@ kind: Deployment
 
 metadata:
   name: job-aggregator
+  namespace: production
   labels:
     app: job-aggregator
 
