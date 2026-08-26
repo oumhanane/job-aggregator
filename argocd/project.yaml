@@ -12,7 +12,7 @@ spec:
     - https://github.com/oumhanane/job-aggregator.git
 
   destinations:
-    - namespace: default
+    - namespace: production
       server: https://kubernetes.default.svc
 
   namespaceResourceWhitelist:
