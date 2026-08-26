@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/oumhanane/job-aggregator/compare/v1.4.0...v1.4.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* update Argo CD repository URL ([b74f23f](https://github.com/oumhanane/job-aggregator/commit/b74f23f1af3f3726a7abe3ce3ac8818d67e2027c))
+
 # [1.4.0](https://github.com/oumhanane/job-aggregator/compare/v1.3.0...v1.4.0) (2026-07-11)
 
 
