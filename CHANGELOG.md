@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/oumhanane/job-aggregator/compare/v1.4.1...v1.4.2) (2026-08-26)
+
+
+### Bug Fixes
+
+* allow production namespace in Argo CD project ([0afb3fd](https://github.com/oumhanane/job-aggregator/commit/0afb3fda9a5bb82314c19aeb8f2d4c8f847a6537))
+
 ## [1.4.1](https://github.com/oumhanane/job-aggregator/compare/v1.4.0...v1.4.1) (2026-08-26)
 
 
