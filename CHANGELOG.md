@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/oumhanane/job-aggregator/compare/v1.4.3...v1.4.4) (2026-08-28)
+
+
+### Bug Fixes
+
+* add seccomp profile for restricted pod security ([dde9c68](https://github.com/oumhanane/job-aggregator/commit/dde9c688d29ac31410d09c5600f43da4fdb6c980))
+
 ## [1.4.3](https://github.com/oumhanane/job-aggregator/compare/v1.4.2...v1.4.3) (2026-08-28)
 
 
