@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/oumhanane/job-aggregator/compare/v1.4.2...v1.4.3) (2026-08-28)
+
+
+### Bug Fixes
+
+* deploy service and ingress in production ([abfbe7d](https://github.com/oumhanane/job-aggregator/commit/abfbe7dc6e150d65ea3edce7e50bbfd18ec76bc3))
+
 ## [1.4.2](https://github.com/oumhanane/job-aggregator/compare/v1.4.1...v1.4.2) (2026-08-26)
 
 
